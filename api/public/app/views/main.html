@@ -1,0 +1,61 @@
+<div class="panel panel-primary">
+ <div class="panel-heading">
+  <h3 class="panel-title text-center">Nachfüllen</h3>
+ </div>
+ <div class="panel-body">
+  <div class="btn-group btn-group-justified">
+   <a ng-repeat="oneatomizer in atomizer" type="button" class="btn btn-success btn-lg" ng-click="refill(oneatomizer)"><span class="glyphicon glyphicon-tint" aria-hidden="true"></span>{{oneatomizer.name}}</a>
+  </div>
+ </div>
+ <ul class="list-group">
+  <li class="list-group-item active">Heute nachgefüllt</li>
+  <li class="list-group-item" ng-repeat="refillA in todaysRefillsAtomizer">{{refillA._id}}<span class="badge">{{refillA.total}}</span></li>
+ </ul>
+</div>
+<div class="panel panel-primary">
+ <div class="panel-heading">
+  <h3 class="panel-title text-center">Durchschnittsverbrauch</h3>
+ </div>
+ <div class="panel-body">
+  <h1 class="text-center">{{medianconsump|number}} ml</h1>
+  <form class="form-horizontal">
+   <fieldset>
+    <div class="form-group text-center">
+     <div class="checkbox">
+      <label> <input type="checkbox" ng-model="withYear"> Mit Jahr
+      </label>
+     </div>
+     <div class="checkbox">
+      <label> <input type="checkbox" ng-model="withMonth"> Mit Monat
+      </label>
+     </div>
+    </div>
+    <div class="form-group text-center">
+     <label for="inputYear" class="col-lg-2 control-label">Jahr</label>
+     <div class="col-lg-10">
+      <input class="form-control" id="inputYear" placeholder="Jahr" type="text" ng-model="year">
+     </div>
+    </div>
+    <div class="form-group text-center">
+     <label for="inputMonth" class="col-lg-2 control-label">Monat</label>
+     <div class="col-lg-10">
+      <input class="form-control" id="inputMonth" placeholder="Monat" type="text" ng-model="month">
+     </div>
+    </div>
+  </form>
+ </div>
+</div>
+<div class="panel panel-primary">
+ <div class="panel-heading">
+  <h3 class="panel-title text-center">Nachgefüllt heute</h3>
+ </div>
+ <div class="panel-body">
+  <ul class="list-group">
+   <li class="list-group-item" ng-repeat="refillA in todaysRefills">{{refillA.refilldate|date:'dd.MM.yyyy'}}, {{refillA.atomizer.name}}
+    <button ng-click="remove(refillA)" class="btn btn-xs btn-danger pull-right">
+     <span aria-hidden="true" class="glyphicon glyphicon-trash"></span>
+    </button>
+   </li>
+  </ul>
+ </div>
+</div>
