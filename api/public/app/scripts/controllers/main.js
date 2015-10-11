@@ -6,6 +6,7 @@
  * @description # MainCtrl Controller of the RTARefillJS
  */
 angular.module('RTARefillJS').controller('MainCtrl', function($scope, apiReport, apiRefill, apiAtomizer) {
+ $scope.deleteEnabled = false;
  $scope.medianconsump = 0.0;
  $scope.year = $scope.withYear ? ($scope.year || new Date().getFullYear()) : undefined;
  $scope.month = $scope.withMonth ? ($scope.month || new Date().getMonth() + 1) : undefined;
@@ -14,12 +15,24 @@ angular.module('RTARefillJS').controller('MainCtrl', function($scope, apiReport,
  $scope.todaysRefills = [];
  $scope.atomizer = [];
  $scope.todaysRefillsAtomizer = [];
+ $scope.refillDate = new Date();
+ $scope.status = {
+   refillDateOpened: false
+ };
+ $scope.dateOptions = {
+   formatYear: 'yyyy',
+   startingDay: 1
+ };
+ $scope.dateFormat = 'dd.MM.yyyy';
+ 
+ $scope.open = function($event) {
+  $scope.status.refillDateOpened = true;
+ };
 
  $scope.refill = function(atomizer) {
-  var refillDate = new Date();
-  refillDate.setUTCHours(0,0,0,0);
+  $scope.refillDate.setUTCHours(0,0,0,0);
   var refill = {
-    "refilldate":refillDate,
+    "refilldate":$scope.refillDate,
     "atomizer":atomizer.toJSON()
   };
   
@@ -29,9 +42,12 @@ angular.module('RTARefillJS').controller('MainCtrl', function($scope, apiReport,
  };
 
  $scope.remove = function(refill) {
-   apiRefill.delete(refill).then(function(){
-    update();
-   });
+  if(!$scope.deleteEnabled){
+   return;
+  }
+  apiRefill.delete(refill).then(function(){
+   update();
+  });
  };
 
  $scope.$watch('withYear', function(ov, nv) {

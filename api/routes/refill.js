@@ -13,11 +13,20 @@ router.all('/*', function(req, res, next) {
 });
 
 router.get('/', function(req, res, next) {
- Refill.find(function(err, refills) {
+ Refill.paginate({},{ page : req.query.page, limit : req.query.itemsCnt, sortBy : { 'refilldate' : -1, 'atomizer.name' : 1 } },function(err, refills) {
   if (err)
    return next(err);
   
   res.json(refills);
+ });
+});
+
+router.get('/totalcount', function(req, res, next) {
+ Refill.count(function(err, refillcount) {
+  if (err)
+   return next(err);
+  
+  res.json({totalcount:refillcount});
  });
 });
 

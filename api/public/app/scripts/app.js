@@ -18,6 +18,7 @@ angular
     'ngRoute',
     'ngSanitize',
     'ngTouch',
+    'ui.bootstrap',
     'api'
   ]).constant('appconfig', {
    apiurl: 'http://localhost:3000'
@@ -34,6 +35,11 @@ angular
         controller: 'AtomizerCtrl',
         controllerAs: 'atomizer'
       })
+      .when('/refills', {
+       templateUrl: 'views/refills.html',
+       controller: 'RefillsCtrl',
+       controllerAs: 'refills'
+     })
       .otherwise({
         redirectTo: '/'
       });

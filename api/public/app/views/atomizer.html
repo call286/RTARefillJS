@@ -1,9 +1,36 @@
 <div class="panel panel-primary" ng-repeat="oneatomizer in atomizer">
-  <div class="panel-heading">
-    <h3 class="panel-title"><h3>{{oneatomizer.name}}</h3></h3>
+ <div class="panel-heading">
+  <h3 class="panel-title">
+   {{oneatomizer.name}}
+   <button ng-click="remove(oneatomizer)" class="btn btn-xs btn-danger pull-right">
+    <span aria-hidden="true" class="glyphicon glyphicon-trash"></span>
+   </button>
+  </h3>
+ </div>
+ <div class="panel-body">
+  <p class="lead">{{oneatomizer.volume|number}} ml</p>
+  <p class="lead">{{oneatomizer.note}}</p>
+ </div>
+</div>
+<div class="panel panel-primary">
+ <div class="panel-heading">
+  <h3 class="panel-title">
+   <h3>Verdampfer anlegen</h3>
+  </h3>
+ </div>
+ <div class="panel-body">
+  <p class="lead">
+   <label for="newAtomizer.name">Name</label><input type="text" class="form-control" ng-model="newAtomizer.name" id="newAtomizer.name" />
+  </p>
+  <p class="lead">
+   <label for="newAtomizer.volume">Füllmenge</label><input type="text" class="form-control" ng-model="newAtomizer.volume" id="newAtomizer.volume" />
+  </p>
+  <p class="lead">
+   <label for="newAtomizer.note">Notiz</label>
+   <textarea class="form-control" ng-model="newAtomizer.note" id="newAtomizer.note"></textarea>
+  </p>
+  <div class="btn-group btn-group-justified">
+   <a type="button" class="btn btn-success btn-lg" ng-click="createAtomizer()"><span class="glyphicon glyphicon-check" aria-hidden="true"></span>Erstellen</a>
   </div>
-  <div class="panel-body">
-    <p class="lead">{{oneatomizer.volume|number}} ml</p>
-    <p class="lead">{{oneatomizer.note}}</p>
-  </div>
+ </div>
 </div>

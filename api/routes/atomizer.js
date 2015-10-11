@@ -30,7 +30,6 @@ router.post('/', function(req, res, next) {
    res.json(data);
   });
  } else {
-  console.log(req.body);
   res.json({NoBody:true});
  }
 });

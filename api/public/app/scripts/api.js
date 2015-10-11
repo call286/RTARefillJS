@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('api', []).factory('apiAtomizer', function($resource, $q, appconfig) {
- var Atomizer = $resource(appconfig.apiurl + '/atomizer');
+ var Atomizer = $resource(appconfig.apiurl + '/atomizer/:id',{id:'@id'});
 
  return {
   get : function() {
@@ -10,17 +10,39 @@ angular.module('api', []).factory('apiAtomizer', function($resource, $q, appconf
     deferred.resolve(data);
    });
    return deferred.promise;
+  },
+  create : function(atomizer) {
+   var deferred = $q.defer();
+   Atomizer.save({},atomizer,function(data) {
+    deferred.resolve(data);
+   });
+   return deferred.promise;
+  },
+  delete : function(atomizer) {
+   var deferred = $q.defer();
+   atomizer.$delete({id:atomizer._id}).then(function(data){
+    deferred.resolve(data);
+   });
+   return deferred.promise;
   }
  };
 }).factory('apiRefill', function($resource, $q, appconfig) {
- var Refill = $resource(appconfig.apiurl + '/refill/:id',{id:'@id'});
+ var Refill = $resource(appconfig.apiurl + '/refill/:id',{id:'@id',page:'@page',itemsCnt:'@itemsCnt'});
+ var RefillTotalCount = $resource(appconfig.apiurl + '/refill/totalcount');
  var RefillsToday = $resource(appconfig.apiurl + '/refill/todaysrefills',{id:'@id'},{delete: { method: "DELETE", url: appconfig.apiurl + '/refill/:id'}});
  var RefillsTodayAtomizer = $resource(appconfig.apiurl + '/refill/atomizerrefillstoday',{id:'@id'},{delete: { method: "DELETE", url: appconfig.apiurl + '/refill/:id'}} );
 
  return {
-  getAll : function() {
+  getAll : function(page, itemsCnt) {
    var deferred = $q.defer();
-   Refill.query(function(data) {
+   Refill.query({page:page, itemsCnt:itemsCnt},function(data) {
+    deferred.resolve(data);
+   });
+   return deferred.promise;
+  },
+  totalCount : function() {
+   var deferred = $q.defer();
+   RefillTotalCount.get(function(data) {
     deferred.resolve(data);
    });
    return deferred.promise;

@@ -3,6 +3,13 @@
   <h3 class="panel-title text-center">Nachfüllen</h3>
  </div>
  <div class="panel-body">
+  <p class="input-group">
+   <input type="text" class="form-control" uib-datepicker-popup="{{dateFormat}}" ng-model="refillDate" is-open="status.refillDateOpened" ng-required="true" close-text="Schliessen" datepicker-options="dateOptions" /> <span class="input-group-btn">
+    <button type="button" class="btn btn-default" ng-click="open($event)">
+     <i class="glyphicon glyphicon-calendar"></i>
+    </button>
+   </span>
+  </p>
   <div class="btn-group btn-group-justified">
    <a ng-repeat="oneatomizer in atomizer" type="button" class="btn btn-success btn-lg" ng-click="refill(oneatomizer)"><span class="glyphicon glyphicon-tint" aria-hidden="true"></span>{{oneatomizer.name}}</a>
   </div>
