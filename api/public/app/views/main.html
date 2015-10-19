@@ -1,3 +1,17 @@
+<div class="panel panel-success">
+ <div class="panel-heading">
+  <h3 class="panel-title text-center">Aktualisieren</h3>
+ </div>
+ <div class="panel-body text-center">
+  <form class="form-inline">
+   <div class="form-group">
+    <button class="btn btn-primary btn-lg" ng-click="update()" ng-disabled="disabled">
+     <span aria-hidden="true" class="glyphicon glyphicon-refresh"></span>
+    </button>
+   </div>
+  </form>
+ </div>
+</div>
 <div class="panel panel-primary">
  <div class="panel-heading">
   <h3 class="panel-title text-center">Nachfüllen</h3>
@@ -10,8 +24,8 @@
     </button>
    </span>
   </p>
-  <div class="btn-group btn-group-justified">
-   <a ng-repeat="oneatomizer in atomizer" type="button" class="btn btn-success btn-lg" ng-click="refill(oneatomizer)"><span class="glyphicon glyphicon-tint" aria-hidden="true"></span>{{oneatomizer.name}}</a>
+  <div class="text-center">
+   <a ng-repeat="oneatomizer in atomizer" type="button" class="btn btn-success btn-lg" ng-click="refill(oneatomizer)"><span style="font-size: smaller;"><span class="glyphicon glyphicon-tint" aria-hidden="true"></span>{{oneatomizer.name}}</span></a>
   </div>
  </div>
  <ul class="list-group">
