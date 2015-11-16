@@ -33,7 +33,7 @@ router.get('/consumpmedian', function(req, res, next) {
   for (var i = consumpperday.length; i--;) {
    if (year !== undefined) {
     var refilldate = new Date(consumpperday[ 0 ]._id);
-    if (Number(refilldate.getFullYear()) === Number(year) && ( month === undefined || Number(month) - 1 === Number(refilldate.getMonth()) )) {
+    if (Number(refilldate.getFullYear()) === Number(year) && (month === undefined || Number(month) - 1 === Number(refilldate.getMonth()))) {
      sum += consumpperday[ 0 ].total;
     } else {
      count--;
@@ -48,6 +48,33 @@ router.get('/consumpmedian', function(req, res, next) {
    medianconsump : (sum / count)
   });
  });
+});
+
+router.get("/permonth", function(req, res, next) {
+ Refill.aggregate([
+  {
+   $group : {
+    _id : {
+     month : {
+      $month : "$refilldate"
+     }
+     ,year : {
+      $year : "$refilldate"
+     }
+     //,aName : "$atomizer.name"
+    },
+    total : {
+     $sum : '$atomizer.volume'
+    },
+    count : {
+     $sum : 1
+    }
+   }
+  }
+ ], function(err, consump) {
+  if (err) return next(err);
+  res.json(consump);
+ })
 });
 
 module.exports = router;
