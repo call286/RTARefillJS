@@ -50,27 +50,39 @@ router.get('/consumpmedian', function(req, res, next) {
  });
 });
 
-router.get("/permonth", function(req, res, next) {
+router.get("/permonth/:year", function(req, res, next) {
+ var year = parseInt(req.params.year);
  Refill.aggregate([
-  {
-   $group : {
-    _id : {
-     month : {
-      $month : "$refilldate"
+   {
+    $match : {
+     refilldate : {
+      $gte : new Date(year, 00, 01, 00, 00, 00),
+      $lt : new Date(year + 1, 00, 01, 00, 00, 00)
      }
-     ,year : {
-      $year : "$refilldate"
+    }
+   }, {
+    $group : {
+     _id : {
+      month : {
+       $month : "$refilldate"
+      }
+     // ,year : {
+     // $year : "$refilldate"
+     // }
+     // ,aName : "$atomizer.name"
+     },
+     total : {
+      $sum : '$atomizer.volume'
+     },
+     count : {
+      $sum : 1
      }
-     //,aName : "$atomizer.name"
-    },
-    total : {
-     $sum : '$atomizer.volume'
-    },
-    count : {
-     $sum : 1
+    }
+   }, {
+    $sort : {
+     refilldate : 1
     }
    }
-  }
  ], function(err, consump) {
   if (err) return next(err);
   res.json(consump);
