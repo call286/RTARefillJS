@@ -51,6 +51,7 @@ router.get('/consumpmedian', function(req, res, next) {
 });
 
 router.get("/permonth/:year", function(req, res, next) {
+ //http://jsfiddle.net/n15wwafg/
  var year = parseInt(req.params.year);
  Refill.aggregate([
    {
