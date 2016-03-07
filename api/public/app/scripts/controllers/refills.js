@@ -10,7 +10,7 @@ angular.module('RTARefillJS').controller('RefillsCtrl', function($scope, apiRefi
  $scope.itemsCnt = 10;
  $scope.totalItems = 0;
  $scope.refills = [];
- $scope.deleteEnabled = false;
+ $scope.deleteEnabled = true;
  
  $scope.update = function(){
   apiRefill.totalCount().then(function(data){

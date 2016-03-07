@@ -21,7 +21,7 @@ angular
     'ui.bootstrap',
     'api'
   ]).constant('appconfig', {
-   apiurl: 'http://localhost:3000'
+   apiurl: 'http://borgman.no-ip.org:3001'
   })
   .config(function ($routeProvider) {
     $routeProvider
