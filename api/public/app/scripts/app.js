@@ -22,8 +22,8 @@ angular
     'chart.js',
     'api'
   ]).constant('appconfig', {
-//   apiurl: 'http://borgman.no-ip.org:3001'
-    apiurl: 'http://localhost:3001'
+    apiurl: 'http://borgman.no-ip.org:3001'
+//    apiurl: 'http://localhost:3001'
   })
   .config(function ($routeProvider) {
     $routeProvider
