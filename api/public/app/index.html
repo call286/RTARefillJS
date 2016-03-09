@@ -15,6 +15,11 @@
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
+    <style>
+    <!--
+    div.centerTable table {margin: 0 auto;}
+    -->
+    </style>
   </head>
   <body ng-app="RTARefillJS">
     <!--[if lte IE 8]>
@@ -49,9 +54,9 @@
       </div>
     </div>
 
-<!--     <div class="container"> -->
-    <div ng-view=""></div>
-<!--     </div> -->
+    <div class="container">
+     <div ng-view=""></div>
+    </div>
 
     <div class="footer">
       <div class="container">

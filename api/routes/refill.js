@@ -59,6 +59,35 @@ router.get('/atomizerrefillstoday', function(req, res, next) {
  });
 });
 
+router.get('/daterefills', function(req, res, next) {
+ var dateStart = new Date(req.query.year, req.query.month, req.query.day);
+ dateStart.setHours(0,0,0,0);
+ var dateEnd = new Date(dateStart);
+ dateEnd.setDate(dateStart.getDate()+1);
+ Refill.find({refilldate:{$gt: dateStart, $lt:dateEnd}},function(err, refills) {
+  if (err)
+   return next(err);
+  
+  res.json(refills);
+ });
+});
+
+router.get('/atomizerdaterefills', function(req, res, next) {
+ var dateStart = new Date(req.query.year, req.query.month, req.query.day);
+ dateStart.setHours(0,0,0,0);
+ var dateEnd = new Date(dateStart);
+ dateEnd.setDate(dateStart.getDate()+1);
+ Refill.aggregate([
+                    { $match : { 'refilldate' : { $gte : dateStart, $lte : dateEnd } } },
+                    { $group : { _id : '$atomizer.name', total:{$sum : 1 } } }
+                    ],function(err, refills) {
+  if (err)
+   return next(err);
+  
+  res.json(refills);
+ });
+});
+
 router.post('/', function(req, res, next) {
  if(req.body !== undefined) {
   Refill.create(req.body, function(err, data) {

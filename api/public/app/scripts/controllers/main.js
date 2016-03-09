@@ -74,15 +74,23 @@ angular.module('RTARefillJS').controller('MainCtrl', function($scope, apiReport,
    $scope.medianconsump = data.medianconsump;
   });
 
-  apiRefill.todaysRefills().then(function(data) {
-   $scope.todaysRefills = data;
-  });
-
   apiAtomizer.get().then(function(data) {
    $scope.atomizer = data;
   });
 
-  apiRefill.todaysRefillsAtomizer().then(function(data) {
+//  apiRefill.todaysRefills().then(function(data) {
+//   $scope.todaysRefills = data;
+//  });
+//
+//  apiRefill.todaysRefillsAtomizer().then(function(data) {
+//   $scope.todaysRefillsAtomizer = data;
+//  });
+
+  apiRefill.dateRefills($scope.refillDate.getFullYear(), $scope.refillDate.getMonth(), $scope.refillDate.getDate()).then(function(data) {
+   $scope.todaysRefills = data;
+  });
+
+  apiRefill.dateRefillsAtomizer($scope.refillDate.getFullYear(), $scope.refillDate.getMonth(), $scope.refillDate.getDate()).then(function(data) {
    $scope.todaysRefillsAtomizer = data;
   });
  };
@@ -92,4 +100,10 @@ angular.module('RTARefillJS').controller('MainCtrl', function($scope, apiReport,
  $scope.update = function() {
   update();
  };
+ 
+ $scope.changedDate = function() {
+  console.clear();
+  console.log($scope.refillDate);
+  update();
+ }
 });
