@@ -19,8 +19,8 @@ angular
     'ngSanitize',
     'ngTouch',
     'ui.bootstrap',
-    'api',
-    'Chart.js'
+    'chart.js',
+    'api'
   ]).constant('appconfig', {
 //   apiurl: 'http://borgman.no-ip.org:3001'
     apiurl: 'http://localhost:3001'

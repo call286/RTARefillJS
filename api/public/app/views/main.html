@@ -3,7 +3,7 @@
   <h4 class="panel-title text-center">Nachfüllen</h4>
  </div>
  <div class="panel-body">
-   <uib-datepicker ng-model="refillDate" ng-required="true" class="well well-sm centerTable" datepicker-options="inlineOptions" ng-change="changedDate()"></uib-datepicker>
+  <uib-datepicker ng-model="refillDate" ng-required="true" class="well well-sm centerTable" datepicker-options="inlineOptions" ng-change="changedDate()"></uib-datepicker>
   <div class="text-center">
    <a ng-repeat="oneatomizer in atomizer" type="button" class="btn btn-success btn-lg col-lg-2 col-md-3 col-xs-12" ng-click="refill(oneatomizer)"><span style="font-size: smaller;"><span class="glyphicon glyphicon-tint" aria-hidden="true"></span>{{oneatomizer.name}}</span></a>
   </div>
@@ -48,12 +48,16 @@
 </div>
 <div class="panel panel-primary">
  <div class="panel-heading">
-  <h3 class="panel-title text-center">Nachgefüllt heute</h3>
+  <h3 class="panel-title text-center">Statistiken</h3>
  </div>
  <div class="panel-body">
-  <button ng-click="calcYearRefillsPerMonth()" class="btn">
-   <span aria-hidden="true" class="glyphicon glyphicon-stats"></span>
-  </button>
-  
+  <div class="col-lg-6">
+   <button ng-click="calcYearRefillsPerMonth()" class="btn">
+    <span aria-hidden="true" class="glyphicon glyphicon-stats"></span>
+   </button>
+  </div>
+  <div class="col-lg-6">
+   <canvas id="bar" class="chart chart-bar" chart-data="data" chart-labels="labels" chart-series="series" chart-options="chartOptions"></canvas>
+  </div>
  </div>
 </div>

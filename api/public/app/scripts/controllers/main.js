@@ -26,6 +26,24 @@ angular.module('RTARefillJS').controller('MainCtrl', function($scope, apiReport,
  };
  $scope.dateFormat = 'dd.MM.yyyy';
  
+ $scope.labels = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+ $scope.series = ['Verbrauch ml'];
+ $scope.chartOptions = {
+   scaleGridLineColor : "rgba(100,100,100,.8)",
+   barValueSpacing : 1,
+   barDatasetSpacing : 1,
+   scaleOverride: true,
+   // ** Required if scaleOverride is true **
+   // Number - The number of steps in a hard coded scale
+   scaleSteps: 20,
+   // Number - The value jump in the hard coded scale
+   scaleStepWidth: 1,
+   // Number - The scale starting value
+   scaleStartValue: 0,
+ };
+
+ $scope.data = [[]];
+ 
  $scope.open = function($event) {
   $scope.status.refillDateOpened = true;
  };
@@ -65,6 +83,7 @@ angular.module('RTARefillJS').controller('MainCtrl', function($scope, apiReport,
 
  $scope.$watch('year', function(ov, nv) {
   update();
+  $scope.calcYearRefillsPerMonth();
  });
 
  var update = function() {
@@ -79,13 +98,13 @@ angular.module('RTARefillJS').controller('MainCtrl', function($scope, apiReport,
    $scope.atomizer = data;
   });
 
-//  apiRefill.todaysRefills().then(function(data) {
-//   $scope.todaysRefills = data;
-//  });
+// apiRefill.todaysRefills().then(function(data) {
+// $scope.todaysRefills = data;
+// });
 //
-//  apiRefill.todaysRefillsAtomizer().then(function(data) {
-//   $scope.todaysRefillsAtomizer = data;
-//  });
+// apiRefill.todaysRefillsAtomizer().then(function(data) {
+// $scope.todaysRefillsAtomizer = data;
+// });
 
   apiRefill.dateRefills($scope.refillDate.getFullYear(), $scope.refillDate.getMonth(), $scope.refillDate.getDate()).then(function(data) {
    $scope.todaysRefills = data;
@@ -104,7 +123,11 @@ angular.module('RTARefillJS').controller('MainCtrl', function($scope, apiReport,
      $scope.medianconsumpYear[month] = data[ii].median;
     }
     
-    console.log($scope.medianconsumpYear);
+    $scope.medianconsumpYear.shift();
+    
+    $scope.labels = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+    $scope.series = ['Verbrauch ml'];
+    $scope.data = [$scope.medianconsumpYear];
    });
   }
  };
