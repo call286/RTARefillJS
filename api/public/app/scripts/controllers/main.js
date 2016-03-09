@@ -8,6 +8,7 @@
 angular.module('RTARefillJS').controller('MainCtrl', function($scope, apiReport, apiRefill, apiAtomizer, $interval) {
  $scope.deleteEnabled = false;
  $scope.medianconsump = 0.0;
+ $scope.medianconsumpYear = undefined;
  $scope.year = $scope.withYear ? ($scope.year || new Date().getFullYear()) : undefined;
  $scope.month = $scope.withMonth ? ($scope.month || new Date().getMonth() + 1) : undefined;
  $scope.withYear = false;
@@ -93,6 +94,19 @@ angular.module('RTARefillJS').controller('MainCtrl', function($scope, apiReport,
   apiRefill.dateRefillsAtomizer($scope.refillDate.getFullYear(), $scope.refillDate.getMonth(), $scope.refillDate.getDate()).then(function(data) {
    $scope.todaysRefillsAtomizer = data;
   });
+  
+  $scope.calcYearRefillsPerMonth = function() {
+   apiReport.getPerMonth(($scope.year || new Date().getFullYear())).then(function(data) {
+    $scope.medianconsumpYear = new Array(13);
+    $scope.medianconsumpYear[0] = data[0].median;
+    for(var ii=0;ii<data.length;ii++){
+     var month = data[ii].month;
+     $scope.medianconsumpYear[month] = data[ii].median;
+    }
+    
+    console.log($scope.medianconsumpYear);
+   });
+  }
  };
 
  update();

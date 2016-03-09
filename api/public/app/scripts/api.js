@@ -93,10 +93,8 @@ angular.module('api', []).factory('apiAtomizer', function($resource, $q, appconf
   }
  };
 }).factory('apiReport', function($resource, $q, appconfig) {
- var ReportConsumpMedian = $resource(appconfig.apiurl + '/report/consumpmedian', {
-  year : '@year',
-  month : '@month'
- });
+ var ReportConsumpMedian = $resource(appconfig.apiurl + '/report/consumpmedian', {year : '@year',month : '@month'});
+ var ReportConsumpPerMonth = $resource(appconfig.apiurl + '/report/permonth/:year', {year : '@year'});
 
  return {
   get : function(year, month) {
@@ -104,6 +102,15 @@ angular.module('api', []).factory('apiAtomizer', function($resource, $q, appconf
    ReportConsumpMedian.get({
     year : year,
     month : month
+   }, function(data) {
+    deferred.resolve(data);
+   });
+   return deferred.promise;
+  },
+  getPerMonth : function(year) {
+   var deferred = $q.defer();
+   ReportConsumpPerMonth.query({
+    year : year
    }, function(data) {
     deferred.resolve(data);
    });

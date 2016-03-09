@@ -51,7 +51,7 @@ router.get('/consumpmedian', function(req, res, next) {
 });
 
 router.get("/permonth/:year", function(req, res, next) {
- //http://jsfiddle.net/n15wwafg/
+ // http://jsfiddle.net/n15wwafg/
  var year = parseInt(req.params.year);
  Refill.aggregate([
    {
@@ -66,27 +66,68 @@ router.get("/permonth/:year", function(req, res, next) {
      _id : {
       month : {
        $month : "$refilldate"
+      },
+      day : {
+       $dayOfMonth : '$refilldate'
       }
-     // ,year : {
-     // $year : "$refilldate"
-     // }
-     // ,aName : "$atomizer.name"
      },
      total : {
       $sum : '$atomizer.volume'
-     },
-     count : {
-      $sum : 1
      }
     }
-   }, {
-    $sort : {
-     refilldate : 1
-    }
    }
- ], function(err, consump) {
+ ], function(err, consumption1) {
   if (err) return next(err);
-  res.json(consump);
+
+  var result = {};
+  var tmpArray = new Array(13);
+
+  for (var ii = 0; ii < consumption1.length; ii++) {
+   var month = consumption1[ ii ]._id.month;
+   var tmpArrayContent = tmpArray[ month ];
+   if (tmpArrayContent === null || tmpArrayContent === undefined) {
+    tmpArrayContent = {
+     volume : 0,
+     count : 0,
+     month : '',
+     median : 0
+    };
+   }
+
+   tmpArrayContent.volume += consumption1[ ii ].total;
+   tmpArrayContent.count++;
+   tmpArrayContent.month = month;
+
+   tmpArray[ month ] = tmpArrayContent;
+  }
+
+  var yearlyVolume = 0;
+  var yearlyCount = 0;
+
+  for (var jj = 1; jj < 13; jj++) {
+   if (tmpArray[ jj ] !== undefined && tmpArray[ jj ] !== null) {
+    yearlyVolume += tmpArray[ jj ].volume;
+    yearlyCount += tmpArray[ jj ].count;
+    tmpArray[ jj ].median = tmpArray[ jj ].volume / tmpArray[ jj ].count;
+   } else {
+    tmpArray[ jj ] = {
+      volume : 0,
+      count : 0,
+      month : jj,
+      median : 0
+     };
+   }
+  }
+
+  tmpArray[ 0 ] = {
+   volume : yearlyVolume,
+   count : yearlyCount,
+   median : (yearlyVolume / yearlyCount)
+  };
+
+  result = tmpArray;
+
+  res.json(result);
  })
 });
 
