@@ -10,9 +10,7 @@ angular.module('RTARefillJS').controller('MainCtrl', function($scope, apiReport,
  $scope.medianconsump = 0.0;
  $scope.medianconsumpYear = undefined;
  $scope.withYear = true;
- $scope.withMonth = false;
  $scope.year = $scope.withYear ? ($scope.year || new Date().getFullYear()) : undefined;
- $scope.month = $scope.withMonth ? ($scope.month || new Date().getMonth() + 1) : undefined;
  $scope.todaysRefills = [];
  $scope.atomizer = [];
  $scope.todaysRefillsAtomizer = [];
@@ -25,6 +23,16 @@ angular.module('RTARefillJS').controller('MainCtrl', function($scope, apiReport,
    startingDay: 1
  };
  $scope.dateFormat = 'dd.MM.yyyy';
+ 
+ //Slider with ticks and values year
+ $scope.slider_year = {
+     value: new Date().getFullYear(),
+     options: {
+         ceil: 2066,
+         floor: 2015,
+         showTicksValues: false
+     }
+ };
  
  $scope.labels = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
  $scope.series = ['Verbrauch ml'];
@@ -80,7 +88,7 @@ angular.module('RTARefillJS').controller('MainCtrl', function($scope, apiReport,
 
     this.datasets.forEach(function (dataset) {
         dataset.bars.forEach(function (bar) {
-            ctx.font = "55px Helvetica";
+            ctx.font = "30px Helvetica";
             ctx.fillText(bar.value.toFixed(2), bar.x, bar.y - 5);
         });
     })
