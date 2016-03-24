@@ -23,7 +23,6 @@ angular
     'rzModule',
     'api'
   ]).constant('appconfig', {
-//    apiurl: 'http://borgman.no-ip.org:3001'
     apiurl: 'http://localhost:3001',
     version: '1.0'
   })
