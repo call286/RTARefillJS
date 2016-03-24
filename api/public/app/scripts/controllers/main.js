@@ -9,10 +9,10 @@ angular.module('RTARefillJS').controller('MainCtrl', function($scope, apiReport,
  $scope.deleteEnabled = false;
  $scope.medianconsump = 0.0;
  $scope.medianconsumpYear = undefined;
+ $scope.withYear = true;
+ $scope.withMonth = false;
  $scope.year = $scope.withYear ? ($scope.year || new Date().getFullYear()) : undefined;
  $scope.month = $scope.withMonth ? ($scope.month || new Date().getMonth() + 1) : undefined;
- $scope.withYear = false;
- $scope.withMonth = false;
  $scope.todaysRefills = [];
  $scope.atomizer = [];
  $scope.todaysRefillsAtomizer = [];
@@ -40,6 +40,52 @@ angular.module('RTARefillJS').controller('MainCtrl', function($scope, apiReport,
    scaleStepWidth: 1,
    // Number - The scale starting value
    scaleStartValue: 0,
+   
+   //Boolean - If there is a stroke on each bar
+   barShowStroke : true,
+
+   //Number - Pixel width of the bar stroke
+   barStrokeWidth : 2,
+
+   //Number - Spacing between each of the X value sets
+   barValueSpacing : 5,
+
+   //Number - Spacing between data sets within X values
+   barDatasetSpacing : 1,
+
+   //String - A legend template
+   legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].fillColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
+
+   // Boolean - Whether to show labels on the scale
+   scaleShowLabels: true,
+
+   // String - Scale label font declaration for the scale label
+   scaleFontFamily: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+
+   // Number - Scale label font size in pixels
+   scaleFontSize: 16,
+
+   // String - Scale label font colour
+   scaleFontColor: "#EEE",
+   
+   showTooltips: false, // Because we show values on top of the bar an the tooltip would interfere with that
+   
+   onAnimationComplete: function () {
+
+    var ctx = this.chart.ctx;
+    ctx.font = this.scale.font;
+    ctx.fillStyle = this.scale.textColor
+    ctx.textAlign = "center";
+    ctx.textBaseline = "bottom";
+
+    this.datasets.forEach(function (dataset) {
+        dataset.bars.forEach(function (bar) {
+            ctx.font = "55px Helvetica";
+            ctx.fillText(bar.value.toFixed(2), bar.x, bar.y - 5);
+        });
+    })
+}
+
  };
 
  $scope.data = [[]];
