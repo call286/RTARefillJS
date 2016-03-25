@@ -9,6 +9,7 @@ var index = require('./routes/index');
 var atomizer = require('./routes/atomizer');
 var refill = require('./routes/refill');
 var report = require('./routes/report');
+var server = require('http').createServer(app)
 
 mongoose.connect('mongodb://localhost/rtarefilljs', function(err) {
  if(err) {
@@ -47,9 +48,14 @@ app.use(function(err, req, res, next) {
  });
 });
 
-var server = app.listen(3001, function () {
-  var host = server.address().address;
-  var port = server.address().port;
+//var server = app.listen(3001, function () {
+//  var host = server.address().address;
+//  var port = server.address().port;
+//
+//  console.log('Example app listening at http://%s:%s', host, port);
+//});
 
-  console.log('Example app listening at http://%s:%s', host, port);
-});
+app.set('port', process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 3001);
+app.set('ip', process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1");
+
+server.listen(app.get('port'), app.get('ip'));
