@@ -57,6 +57,7 @@ app.use(function(err, req, res, next) {
 //});
 
 //Start the server
-var port = process.env.OPENSHIFT_INTERNAL_PORT || process.env.OPENSHIFT_NODEJS_PORT || 3001
- , ip = process.env.OPENSHIFT_INTERNAL_IP || process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+var port = process.env.OPENSHIFT_INTERNAL_PORT || process.env.OPENSHIFT_NODEJS_PORT || process.env.OPENSHIFT_NodeJS_PORT || 3001
+ , ip = process.env.OPENSHIFT_INTERNAL_IP || process.env.OPENSHIFT_NODEJS_IP || process.env.OPENSHIFT_NodeJS_PORT || "127.0.0.1";
+console.log(ip+':'+port)
 server.listen(port, ip);
