@@ -10,12 +10,13 @@ var atomizer = require('./routes/atomizer');
 var refill = require('./routes/refill');
 var report = require('./routes/report');
 var server = require('http').createServer(app)
+var mongourl = process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://localhost/rtarefilljs'; 
 
-mongoose.connect('mongodb://localhost/rtarefilljs', function(err) {
+mongoose.connect(mongourl, function(err) {
  if(err) {
-     console.log('connection error', err);
+     console.log('MongoDB connection error', err);
  } else {
-     console.log('connection successful');
+     console.log('MongoDB connection successful');
  }
 });
 
@@ -55,7 +56,7 @@ app.use(function(err, req, res, next) {
 //  console.log('Example app listening at http://%s:%s', host, port);
 //});
 
-app.set('port', process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 3001);
-app.set('ip', process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1");
-
-server.listen(app.get('port'), app.get('ip'));
+//Start the server
+var port = process.env.OPENSHIFT_INTERNAL_PORT || process.env.OPENSHIFT_NODEJS_PORT || 3001
+ , ip = process.env.OPENSHIFT_INTERNAL_IP || process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+server.listen(port, ip);
