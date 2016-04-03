@@ -28,7 +28,7 @@ angular.module('RTARefillJS').controller('ABCMainCtrl', function($scope, apiRepo
  $scope.slider_year = {
      value: new Date().getFullYear(),
      options: {
-         ceil: 2066,
+         ceil: new Date().getFullYear(),
          floor: 2015,
          showTicksValues: false
      }
