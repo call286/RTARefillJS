@@ -19,8 +19,8 @@ angular
     'ngSanitize',
     'ngTouch',
     'ui.bootstrap',
-    'chart.js',
-    'rzModule',
+//    'chart.js',
+//    'rzModule',
     'api'
   ]).constant('appconfig', {
     apiurl: 'http://borgman.no-ip.org:3001',
