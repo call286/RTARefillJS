@@ -1,1 +1,3 @@
 /node_modules/
+/bower_components/
+/api/public/app/bower_components
