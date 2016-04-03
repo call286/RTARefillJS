@@ -38,8 +38,6 @@ angular.module('RTARefillJS').controller('ABCMainCtrl', function($scope, apiRepo
  $scope.series = ['Verbrauch ml'];
  $scope.chartOptions = {
    scaleGridLineColor : "rgba(100,100,100,.8)",
-   barValueSpacing : 1,
-   barDatasetSpacing : 1,
    scaleOverride: true,
    // ** Required if scaleOverride is true **
    // Number - The number of steps in a hard coded scale
