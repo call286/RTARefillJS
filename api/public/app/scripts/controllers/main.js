@@ -5,7 +5,7 @@
  * @name RTARefillJS.controller:MainCtrl
  * @description # MainCtrl Controller of the RTARefillJS
  */
-angular.module('RTARefillJS').controller('MainCtrl', function($scope, apiReport, apiRefill, apiAtomizer, $interval) {
+angular.module('RTARefillJS').controller('ABCMainCtrl', function($scope, apiReport, apiRefill, apiAtomizer, $interval) {
  $scope.deleteEnabled = false;
  $scope.medianconsump = 0.0;
  $scope.medianconsumpYear = undefined;
