@@ -150,14 +150,6 @@ angular.module('RTARefillJS').controller('ABCMainCtrl', function($scope, apiRepo
    $scope.atomizer = data;
   });
 
-// apiRefill.todaysRefills().then(function(data) {
-// $scope.todaysRefills = data;
-// });
-//
-// apiRefill.todaysRefillsAtomizer().then(function(data) {
-// $scope.todaysRefillsAtomizer = data;
-// });
-
   apiRefill.dateRefills($scope.refillDate.getFullYear(), $scope.refillDate.getMonth(), $scope.refillDate.getDate()).then(function(data) {
    $scope.todaysRefills = data;
   });
