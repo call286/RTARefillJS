@@ -21,10 +21,13 @@ angular
     'ui.bootstrap',
     'chart.js',
     'rzModule',
+    'angularMoment',
     'api'
   ]).constant('appconfig', {
     apiurl: 'http://borgman.no-ip.org:3001',
     version: '1.0'
+  }).constant('angularMomentConfig', {
+   timezone: 'Europe/Berlin' // e.g. 'Europe/London'
   })
   .config(function ($routeProvider) {
     $routeProvider
