@@ -135,8 +135,25 @@ angular.module('RTARefillJS').controller('ABCMainCtrl', function($scope, apiRepo
 
  $scope.$watch('year', function(ov, nv) {
   update();
-  $scope.calcYearRefillsPerMonth();
+//  $scope.calcYearRefillsPerMonth();
  });
+ 
+ $scope.calcYearRefillsPerMonth = function() {
+  apiReport.getPerMonth(($scope.year || new Date().getFullYear())).then(function(data) {
+   $scope.medianconsumpYear = new Array(13);
+   $scope.medianconsumpYear[0] = data[0].median;
+   for(var ii=0;ii<data.length;ii++){
+    var month = data[ii].month;
+    $scope.medianconsumpYear[month] = data[ii].median;
+   }
+   
+   $scope.medianconsumpYear.shift();
+   
+   $scope.labels = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+   $scope.series = ['Verbrauch ml'];
+   $scope.data = [$scope.medianconsumpYear];
+  });
+ }
 
  var update = function() {
   $scope.year = $scope.withYear ? ($scope.year || new Date().getFullYear()) : undefined;
@@ -158,22 +175,7 @@ angular.module('RTARefillJS').controller('ABCMainCtrl', function($scope, apiRepo
    $scope.todaysRefillsAtomizer = data;
   });
   
-  $scope.calcYearRefillsPerMonth = function() {
-   apiReport.getPerMonth(($scope.year || new Date().getFullYear())).then(function(data) {
-    $scope.medianconsumpYear = new Array(13);
-    $scope.medianconsumpYear[0] = data[0].median;
-    for(var ii=0;ii<data.length;ii++){
-     var month = data[ii].month;
-     $scope.medianconsumpYear[month] = data[ii].median;
-    }
-    
-    $scope.medianconsumpYear.shift();
-    
-    $scope.labels = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
-    $scope.series = ['Verbrauch ml'];
-    $scope.data = [$scope.medianconsumpYear];
-   });
-  }
+  $scope.calcYearRefillsPerMonth();
  };
 
  update();

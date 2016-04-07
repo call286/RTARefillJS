@@ -24,7 +24,7 @@ angular
     'angularMoment',
     'api'
   ]).constant('appconfig', {
-    apiurl: 'http://borgman.no-ip.org:3001',
+    apiurl: 'http://localhost:3001',
     version: '1.0'
   }).constant('angularMomentConfig', {
    timezone: 'Europe/Berlin' // e.g. 'Europe/London'
