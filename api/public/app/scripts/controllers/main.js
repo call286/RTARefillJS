@@ -5,7 +5,7 @@
  * @name RTARefillJS.controller:MainCtrl
  * @description # MainCtrl Controller of the RTARefillJS
  */
-angular.module('RTARefillJS').controller('ABCMainCtrl', function($scope, apiReport, apiRefill, apiAtomizer, $interval) {
+angular.module('RTARefillJS').controller('ABCMainCtrl', function($scope, apiReport, apiRefill, apiAtomizer, $interval, moment) {
  $scope.deleteEnabled = false;
  $scope.medianconsump = 0.0;
  $scope.medianconsumpYear = undefined;
@@ -139,7 +139,7 @@ angular.module('RTARefillJS').controller('ABCMainCtrl', function($scope, apiRepo
  });
  
  $scope.calcYearRefillsPerMonth = function() {
-  apiReport.getPerMonth(($scope.year || new Date().getFullYear())).then(function(data) {
+  apiReport.getPerMonth(($scope.year || new Date().getFullYear()), moment().utcOffset()).then(function(data) {
    $scope.medianconsumpYear = new Array(13);
    $scope.medianconsumpYear[0] = data[0].median;
    for(var ii=0;ii<data.length;ii++){
@@ -159,7 +159,7 @@ angular.module('RTARefillJS').controller('ABCMainCtrl', function($scope, apiRepo
   $scope.year = $scope.withYear ? ($scope.year || new Date().getFullYear()) : undefined;
   $scope.month = $scope.withMonth ? ($scope.month || new Date().getMonth() + 1) : undefined;
 
-  apiReport.get($scope.year, $scope.month).then(function(data) {
+  apiReport.get($scope.year, $scope.month, moment().utcOffset()).then(function(data) {
    $scope.medianconsump = data.medianconsump;
   });
 
@@ -167,11 +167,11 @@ angular.module('RTARefillJS').controller('ABCMainCtrl', function($scope, apiRepo
    $scope.atomizer = data;
   });
 
-  apiRefill.dateRefills($scope.refillDate.getFullYear(), $scope.refillDate.getMonth(), $scope.refillDate.getDate()).then(function(data) {
+  apiRefill.dateRefills($scope.refillDate.getFullYear(), $scope.refillDate.getMonth(), $scope.refillDate.getDate(), moment().utcOffset()).then(function(data) {
    $scope.todaysRefills = data;
   });
 
-  apiRefill.dateRefillsAtomizer($scope.refillDate.getFullYear(), $scope.refillDate.getMonth(), $scope.refillDate.getDate()).then(function(data) {
+  apiRefill.dateRefillsAtomizer($scope.refillDate.getFullYear(), $scope.refillDate.getMonth(), $scope.refillDate.getDate(), moment().utcOffset()).then(function(data) {
    $scope.todaysRefillsAtomizer = data;
   });
   
@@ -185,8 +185,6 @@ angular.module('RTARefillJS').controller('ABCMainCtrl', function($scope, apiRepo
  };
  
  $scope.changedDate = function() {
-  console.clear();
-  console.log($scope.refillDate);
   update();
  }
 });

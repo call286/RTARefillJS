@@ -29,10 +29,10 @@ angular.module('api', []).factory('apiAtomizer', function($resource, $q, appconf
 }).factory('apiRefill', function($resource, $q, appconfig) {
  var Refill = $resource(appconfig.apiurl + '/refill/:id',{id:'@id',page:'@page',itemsCnt:'@itemsCnt'});
  var RefillTotalCount = $resource(appconfig.apiurl + '/refill/totalcount');
- var RefillsToday = $resource(appconfig.apiurl + '/refill/todaysrefills',{id:'@id'},{delete: { method: "DELETE", url: appconfig.apiurl + '/refill/:id'}});
- var RefillsTodayAtomizer = $resource(appconfig.apiurl + '/refill/atomizerrefillstoday',{id:'@id'},{delete: { method: "DELETE", url: appconfig.apiurl + '/refill/:id'}} );
- var RefillsDate = $resource(appconfig.apiurl + '/refill/daterefills',{id:'@id',year:'@year',month:'@month',day:'@day'},{delete: { method: "DELETE", url: appconfig.apiurl + '/refill/:id'}});
- var RefillsDateAtomizer = $resource(appconfig.apiurl + '/refill/atomizerdaterefills',{id:'@id',year:'@year',month:'@month',day:'@day'},{delete: { method: "DELETE", url: appconfig.apiurl + '/refill/:id'}} );
+ var RefillsToday = $resource(appconfig.apiurl + '/refill/todaysrefills',{id:'@id',timezone:'@timezone'},{delete: { method: "DELETE", url: appconfig.apiurl + '/refill/:id'}});
+ var RefillsTodayAtomizer = $resource(appconfig.apiurl + '/refill/atomizerrefillstoday',{id:'@id',timezone:'@timezone'},{delete: { method: "DELETE", url: appconfig.apiurl + '/refill/:id'}} );
+ var RefillsDate = $resource(appconfig.apiurl + '/refill/daterefills',{id:'@id',year:'@year',month:'@month',day:'@day',timezone:'@timezone'},{delete: { method: "DELETE", url: appconfig.apiurl + '/refill/:id'}});
+ var RefillsDateAtomizer = $resource(appconfig.apiurl + '/refill/atomizerdaterefills',{id:'@id',year:'@year',month:'@month',day:'@day',timezone:'@timezone'},{delete: { method: "DELETE", url: appconfig.apiurl + '/refill/:id'}} );
 
  return {
   getAll : function(page, itemsCnt) {
@@ -63,16 +63,16 @@ angular.module('api', []).factory('apiAtomizer', function($resource, $q, appconf
    });
    return deferred.promise;
   },
-  dateRefills : function(year, month, day) {
+  dateRefills : function(year, month, day, timezone) {
    var deferred = $q.defer();
-   RefillsDate.query({year:year, month:month, day:day},function(data) {
+   RefillsDate.query({year:year, month:month, day:day, timezone},function(data) {
     deferred.resolve(data);
    });
    return deferred.promise;
   },
-  dateRefillsAtomizer : function(year, month, day) {
+  dateRefillsAtomizer : function(year, month, day, timezone) {
    var deferred = $q.defer();
-   RefillsDateAtomizer.query({year:year, month:month, day:day},function(data) {
+   RefillsDateAtomizer.query({year:year, month:month, day:day, timezone},function(data) {
     deferred.resolve(data);
    });
    return deferred.promise;
@@ -93,8 +93,8 @@ angular.module('api', []).factory('apiAtomizer', function($resource, $q, appconf
   }
  };
 }).factory('apiReport', function($resource, $q, appconfig) {
- var ReportConsumpMedian = $resource(appconfig.apiurl + '/report/consumpmedian', {year : '@year',month : '@month'});
- var ReportConsumpPerMonth = $resource(appconfig.apiurl + '/report/permonth/:year', {year : '@year'});
+ var ReportConsumpMedian = $resource(appconfig.apiurl + '/report/consumpmedian', {year : '@year',month : '@month', timezone : '@timezone'});
+ var ReportConsumpPerMonth = $resource(appconfig.apiurl + '/report/permonth/:year', {year : '@year', timezone : '@timezone'});
 
  return {
   get : function(year, month) {

@@ -31,8 +31,8 @@ router.get('/totalcount', function(req, res, next) {
 });
 
 router.get('/todaysrefills', function(req, res, next) {
- var dateStart = new Date(Date.UTC());
- dateStart.setUTCHours(0,0,0,0);
+ var dateStart = new Date();
+ dateStart.setHours(0,0,0,0);
  var dateEnd = new Date(dateStart);
  dateEnd.setDate(dateStart.getDate()+1);
  Refill.find({refilldate:{$gt: dateStart, $lt:dateEnd}},function(err, refills) {
@@ -44,12 +44,10 @@ router.get('/todaysrefills', function(req, res, next) {
 });
 
 router.get('/atomizerrefillstoday', function(req, res, next) {
- var dateStart = new Date(Date.UTC());
- dateStart.setUTCHours(0,0,0,0);
- var dateEnd = new Date(dateStart.getUTCDate());
- dateEnd.setUTCDate(dateStart.getUTCDate()+1);
- console.log(dateStart);
- console.log(dateEnd);
+ var dateStart = new Date();
+ dateStart.setHours(0,0,0,0);
+ var dateEnd = new Date(dateStart);
+ dateEnd.setDate(dateStart.getDate()+1);
  Refill.aggregate([
                     { $match : { 'refilldate' : { $gte : dateStart, $lte : dateEnd } } },
                     { $group : { _id : '$atomizer.name', total:{$sum : 1 } } }
@@ -62,11 +60,9 @@ router.get('/atomizerrefillstoday', function(req, res, next) {
 });
 
 router.get('/daterefills', function(req, res, next) {
- var dateStart = new Date(Date.UTC(req.query.year, req.query.month, req.query.day, 0, 0, 0, 0));
- var dateEnd = new Date(Date.UTC(dateStart));
+ var dateStart = new Date(req.query.year, req.query.month, req.query.day, 0, 0, 0, 0);
+ var dateEnd = new Date(dateStart);
  dateEnd.setDate(dateStart.getDate()+1);
- console.log(dateStart);
- console.log(dateEnd);
  Refill.find({refilldate:{$gt: dateStart, $lt:dateEnd}},function(err, refills) {
   if (err)
    return next(err);
@@ -76,8 +72,10 @@ router.get('/daterefills', function(req, res, next) {
 });
 
 router.get('/atomizerdaterefills', function(req, res, next) {
- var dateStart = new Date(Date.UTC(req.query.year, req.query.month, req.query.day, 0, 0, 0, 0));
- var dateEnd = new Date(Date.UTC(dateStart));
+ var momentStart = require('moment');
+ var momentEnd = require('moment');
+ var dateStart = new Date(req.query.year, req.query.month, req.query.day, 0, 0, 0, 0);
+ var dateEnd = new Date(dateStart);
  dateEnd.setDate(dateStart.getDate()+1);
  console.log(dateStart);
  console.log(dateEnd);

@@ -10,7 +10,7 @@ var atomizer = require('./routes/atomizer');
 var refill = require('./routes/refill');
 var report = require('./routes/report');
 var server = require('http').createServer(app)
-var mongourl = process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://localhost/rtarefilljs'; 
+var mongourl = process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://localhost/rtarefilljs';
 
 mongoose.connect(mongourl, function(err) {
  if(err) {
