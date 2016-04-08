@@ -44,8 +44,7 @@ router.get('/todaysrefills', function(req, res, next) {
 });
 
 router.get('/atomizerrefillstoday', function(req, res, next) {
- var dateStart = new Date();
- dateStart.setHours(0,0,0,0);
+ var dateStart = moment().startOf('day');
  var dateEnd = new Date(dateStart);
  dateEnd.setDate(dateStart.getDate()+1);
  Refill.aggregate([
@@ -72,13 +71,21 @@ router.get('/daterefills', function(req, res, next) {
 });
 
 router.get('/atomizerdaterefills', function(req, res, next) {
- var momentStart = require('moment');
- var momentEnd = require('moment');
  var dateStart = new Date(req.query.year, req.query.month, req.query.day, 0, 0, 0, 0);
  var dateEnd = new Date(dateStart);
  dateEnd.setDate(dateStart.getDate()+1);
- console.log(dateStart);
- console.log(dateEnd);
+ 
+ var momentStart = require('moment');
+ momentStart = momentStart(dateStart).startOf('day');
+ momentStart.utcOffset(req.query.timezone);
+ 
+ var momentEnd = require('moment');
+ momentEnd     = momentEnd(momentStart).endOf('day');
+ momentEnd.utcOffset(req.query.timezone);
+ 
+ console.log(req.query.timezone);
+ console.log(momentStart.format());
+ console.log(momentEnd.format());
  Refill.aggregate([
                     { $match : { 'refilldate' : { $gte : dateStart, $lte : dateEnd } } },
                     { $group : { _id : '$atomizer.name', total:{$sum : 1 } } }

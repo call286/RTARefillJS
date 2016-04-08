@@ -42,11 +42,13 @@ app.use(function(req, res, next) {
 
 app.use(function(err, req, res, next) {
  res.status(err.status || 500);
- res.render('error', {
-     message: err.message,
-     error: err,
-     title: 'error'
- });
+ console.log(err);
+ console.log(err.stack);
+// res.render('error', {
+//     message: err.message,
+//     error: err,
+//     title: 'error'
+// });
 });
 
 //var server = app.listen(3001, function () {

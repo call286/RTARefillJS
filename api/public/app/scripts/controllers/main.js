@@ -11,7 +11,6 @@ angular.module('RTARefillJS').controller('ABCMainCtrl', function($scope, apiRepo
  $scope.medianconsumpYear = undefined;
  $scope.withYear = true;
  $scope.year = $scope.withYear ? ($scope.year || new Date().getFullYear()) : undefined;
- $scope.todaysRefills = [];
  $scope.atomizer = [];
  $scope.todaysRefillsAtomizer = [];
  $scope.refillDate = new Date();
@@ -101,9 +100,10 @@ angular.module('RTARefillJS').controller('ABCMainCtrl', function($scope, apiRepo
  };
 
  $scope.refill = function(atomizer) {
-  $scope.refillDate.setUTCHours(0,0,0,0);
+  $scope.refillDate.setHours(0,0,0,0);
+  var test = moment($scope.refillDate);
   var refill = {
-    "refilldate":$scope.refillDate,
+    "refilldate":test.format(),//$scope.refillDate,
     "atomizer":atomizer.toJSON()
   };
   
@@ -165,10 +165,6 @@ angular.module('RTARefillJS').controller('ABCMainCtrl', function($scope, apiRepo
 
   apiAtomizer.get().then(function(data) {
    $scope.atomizer = data;
-  });
-
-  apiRefill.dateRefills($scope.refillDate.getFullYear(), $scope.refillDate.getMonth(), $scope.refillDate.getDate(), moment().utcOffset()).then(function(data) {
-   $scope.todaysRefills = data;
   });
 
   apiRefill.dateRefillsAtomizer($scope.refillDate.getFullYear(), $scope.refillDate.getMonth(), $scope.refillDate.getDate(), moment().utcOffset()).then(function(data) {
