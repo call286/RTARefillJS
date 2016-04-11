@@ -3,6 +3,7 @@ var router = express.Router();
 
 var mongoose = require('mongoose');
 var Refill = require('../models/refill.js');
+var moment = require('moment');
 
 // CORS
 router.all('/*', function(req, res, next) {
@@ -44,9 +45,9 @@ router.get('/todaysrefills', function(req, res, next) {
 });
 
 router.get('/atomizerrefillstoday', function(req, res, next) {
- var dateStart = moment().startOf('day');
- var dateEnd = new Date(dateStart);
- dateEnd.setDate(dateStart.getDate()+1);
+ var momentStart = moment().startOf('day');
+ var momentEnd = moment().endOf('day');
+
  Refill.aggregate([
                     { $match : { 'refilldate' : { $gte : dateStart, $lte : dateEnd } } },
                     { $group : { _id : '$atomizer.name', total:{$sum : 1 } } }
@@ -59,10 +60,16 @@ router.get('/atomizerrefillstoday', function(req, res, next) {
 });
 
 router.get('/daterefills', function(req, res, next) {
- var dateStart = new Date(req.query.year, req.query.month, req.query.day, 0, 0, 0, 0);
- var dateEnd = new Date(dateStart);
- dateEnd.setDate(dateStart.getDate()+1);
- Refill.find({refilldate:{$gt: dateStart, $lt:dateEnd}},function(err, refills) {
+ var year = req.query.year;
+ var month = req.query.month.length == 1 ? '0' + (parseInt(req.query.month)+1) : (parseInt(req.query.month)+1);
+ var day = req.query.day.length == 1 ? '0' + req.query.day : req.query.day;
+ var clientTZ = req.query.timezone;
+ var dateStr = year.toString() + '-' + month.toString() + '-' + day.toString() + 'T00:00:00.000+02:00';
+ 
+ var momentStart = moment(dateStr).startOf('day');
+ var momentEnd = moment(dateStr).endOf('day');
+ 
+ Refill.find({refilldate:{$gte : momentStart.toDate(), $lte : momentEnd.toDate()}},function(err, refills) {
   if (err)
    return next(err);
   
@@ -71,23 +78,17 @@ router.get('/daterefills', function(req, res, next) {
 });
 
 router.get('/atomizerdaterefills', function(req, res, next) {
- var dateStart = new Date(req.query.year, req.query.month, req.query.day, 0, 0, 0, 0);
- var dateEnd = new Date(dateStart);
- dateEnd.setDate(dateStart.getDate()+1);
+ var year = req.query.year;
+ var month = req.query.month.length == 1 ? '0' + (parseInt(req.query.month)+1) : (parseInt(req.query.month)+1);
+ var day = req.query.day.length == 1 ? '0' + req.query.day : req.query.day;
+ var clientTZ = req.query.timezone;
+ var dateStr = year.toString() + '-' + month.toString() + '-' + day.toString() + 'T00:00:00.000+02:00';
  
- var momentStart = require('moment');
- momentStart = momentStart(dateStart).startOf('day');
- momentStart.utcOffset(req.query.timezone);
+ var momentStart = moment(dateStr).startOf('day');
+ var momentEnd = moment(dateStr).endOf('day');
  
- var momentEnd = require('moment');
- momentEnd     = momentEnd(momentStart).endOf('day');
- momentEnd.utcOffset(req.query.timezone);
- 
- console.log(req.query.timezone);
- console.log(momentStart.format());
- console.log(momentEnd.format());
  Refill.aggregate([
-                    { $match : { 'refilldate' : { $gte : dateStart, $lte : dateEnd } } },
+                    { $match : { 'refilldate' : { $gte : momentStart.toDate(), $lte : momentEnd.toDate() } } },
                     { $group : { _id : '$atomizer.name', total:{$sum : 1 } } }
                     ],function(err, refills) {
   if (err)
